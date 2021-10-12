@@ -1,0 +1,3 @@
+{"order_id":"1","inventory":10,"order_hour_of_day":11,"zip_code_available":true,"payment_status":"OK"}
+{"order_id":"2","inventory":20,"order_hour_of_day":12,"zip_code_available":false,"payment_status":"OK"}
+{"order_id":"3","inventory":30,"order_hour_of_day":13,"zip_code_available":false,"payment_status":"FAILED"}

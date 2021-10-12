@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  feature_calculator:
+    build:
+      context: ./feature_calculator
+    volumes:
+      - ${LOCAL_ROOT_FOLDER}/data:/app/data
+      - ${LOCAL_ROOT_FOLDER}/feature_storage:/app/feature_storage
+    environment:
+      INPUT_DIR: /app/data
+      OUTPUT_DIR: /app/feature_storage
+  webservice:
+    build:
+      context: ./order-status-recommender-api
+    volumes:
+      - ${LOCAL_ROOT_FOLDER}/feature_storage:/app/feature_storage
+    environment:
+      HOST: webservice
+      FEATURES_FILE: /app/feature_storage/features
+    depends_on:
+      - "feature_calculator"
+    ports:
+      - "8080:8080"
+  batch_recommender:
+    build:
+      context: ./batch_recommender
+    depends_on:
+      - "webservice"
+    volumes:
+      - ${LOCAL_ROOT_FOLDER}/data:/app/data
+      - ${LOCAL_ROOT_FOLDER}/results:/app/results
+    environment:
+      ORDERS_INPUT_FILE: /app/data/orders.csv
+      WEBSERVICE_HOST: webservice
+      OUTPUT_DIR: /app/results 
